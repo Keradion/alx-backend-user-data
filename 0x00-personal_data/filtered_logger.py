@@ -1,10 +1,20 @@
 #!/usr/bin/env python3
 """ a function to create a mysql server connector"""
 import os
+import re
 import mysql.connector
+from typing import List
 
 
-def get_db() -> mysql.connector.connection.MYSQLConnection:
+def filter_datum(
+        fields: List[str], redaction: str, message: str, separator: str) -> str:
+    """ Return obfuscated log message """
+    for key in fields:
+        message = re.sub(rf"{key}=[^;]*", f"{key}={redaction}", message)
+
+    return message
+
+def get_db() -> "MySQL Connector":
     """Returns a connector to MySQL database server."""
 
     user = os.environ.get('PERSONAL_DATA_DB_USERNAME', 'root')
