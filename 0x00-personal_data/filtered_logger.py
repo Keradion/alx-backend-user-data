@@ -4,7 +4,7 @@ import os
 import mysql.connector
 
 
-def get_db():
+def get_db() -> mysql.connector.connection.MYSQLConnection:
     """Returns a connector to MySQL database server."""
 
     user = os.environ.get('PERSONAL_DATA_DB_USERNAME', 'root')
