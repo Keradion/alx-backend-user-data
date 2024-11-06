@@ -1,5 +1,5 @@
 #!/ust/bin/env python3
-""""""
+""" create a mysql connector"""
 import os
 import mysql.connector
 
