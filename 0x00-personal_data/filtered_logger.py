@@ -4,6 +4,7 @@ import os
 import re
 import mysql.connector
 from typing import List
+import logging
 
 
 def filter_datum(
@@ -12,8 +13,27 @@ def filter_datum(
     """ Return obfuscated log message """
     for key in fields:
         message = re.sub(rf"{key}=[^;]*", f"{key}={redaction}", message)
-
     return message
+
+
+class RedactingFormatter(logging.Formatter):
+    """ Redacting Formatter class """
+
+    REDACTION = "***"
+    FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
+    SEPARATOR = ";"
+
+    def __init__(self, fields: List[str]):
+        super(RedactingFormatter, self).__init__(self.FORMAT)
+        self.fields = fields
+
+    def format(self, record: logging.LogRecord) -> str:
+        """ """
+
+        # Call filter_datum to obfuscated log parts
+
+        return filter_datum(self.fields, self.REDACTION, super().format(record), self.SEPARATOR)
+
 
 
 def get_db() -> "MySQL Connector":
@@ -29,3 +49,4 @@ def get_db() -> "MySQL Connector":
             database=db_name, host=host, user=user, passwd=passwd)
 
     return db
+
