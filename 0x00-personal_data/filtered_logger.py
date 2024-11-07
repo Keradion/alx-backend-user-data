@@ -32,8 +32,8 @@ class RedactingFormatter(logging.Formatter):
 
         # Call filter_datum to obfuscated log parts
 
-        return filter_datum(self.fields, self.REDACTION, super().format(record), self.SEPARATOR)
-
+        return filter_datum(self.fields, self.REDACTION, super().format(
+            record), self.SEPARATOR)
 
 
 def get_db() -> "MySQL Connector":
@@ -49,4 +49,3 @@ def get_db() -> "MySQL Connector":
             database=db_name, host=host, user=user, passwd=passwd)
 
     return db
-
