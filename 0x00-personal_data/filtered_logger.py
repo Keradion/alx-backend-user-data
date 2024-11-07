@@ -35,6 +35,25 @@ class RedactingFormatter(logging.Formatter):
         return filter_datum(self.fields, self.REDACTION, super().format(
             record), self.SEPARATOR)
 
+PII_FIELDS = ("name", "email", "password", "ssn", "phone")
+
+def get_logger() -> logging.Logger:
+    """Return logging.Logger object"""
+    # Create a logger object
+    logger = logging.getLogger('user_data')
+    # Set log level
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+
+    target_handler = logging.StreamHandler()
+    target_handler.setLevel(logging.INFO)
+
+    formatter = RedactingFormatter(list(PII_FIELDS))
+    target_handle.setFormatter(formatter)
+
+    logger.addHandler(target_handler)
+    return logger
+
 
 def get_db() -> "MySQL Connector":
     """Returns a connector to MySQL database server."""
@@ -49,3 +68,25 @@ def get_db() -> "MySQL Connector":
             database=db_name, host=host, user=user, passwd=passwd)
 
     return db
+
+
+def main() -> None:
+    """ 
+        retrieve all role in the users table and display
+        each row under a filtered format
+    """
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM users;")
+
+    headers = [field[0] for field in cursor.description]
+    logger = get_logger()
+
+    for row in cursor:
+        info_answer = ''
+        for f, p in zip(row, headers):
+            info_answer += f'{p}={(f)}; '
+        logger.info(info_answer)
+
+    cursor.close()
+    db.close()
