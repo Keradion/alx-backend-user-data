@@ -8,6 +8,8 @@ from flask import Flask, jsonify, abort, request
 from flask_cors import (CORS, cross_origin)
 import os
 
+
+# This paths are excluded from authentication
 excluded_paths = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
 
 app = Flask(__name__)
@@ -17,7 +19,7 @@ auth = None
 
 AUTH_TYPE = os.getenv('AUTH_TYPE')
 
-if AUTH_TYPE == auth:
+if AUTH_TYPE == 'auth':
     from api.v1.auth.auth import Auth
     auth = Auth()
 
@@ -27,18 +29,18 @@ def before_request():
     if auth is None:
         pass
     # Get path from request
-    request_path = request.headers.get('path')
+    request_path = request.path
 
-    is_valid = auth.required_path(request_path ,excluded_paths)
+    # check if the path requires authentication
+    is_valid_path = auth.require_auth(request_path ,excluded_paths)
     
-    if not is_valid:
-        pass
-
-    if not auth.authorization_header(request):
-        abort(401)
-    
-    if not auth.current_user(request):
-        abort(403)
+    if is_valid_path:
+        # If no authorization header provided
+        if not auth.authorization_header(request):
+            abort(401)
+        # If the user is not valid
+        if not auth.current_user(request):
+            abort(403)
 
 @app.errorhandler(404)
 def not_found(error) -> str:
