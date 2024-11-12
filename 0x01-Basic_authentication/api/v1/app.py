@@ -10,7 +10,8 @@ import os
 
 
 # This paths are excluded from authentication
-excluded_paths = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
+excluded_paths = [
+        '/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
@@ -27,6 +28,7 @@ if AUTH_TYPE == 'basic_auth':
     from api.v1.auth.basic_auth import BasicAuth
     auth = BasicAuth()
 
+
 @app.before_request
 def before_request():
     """Handle everythin before any route handler is called"""
@@ -36,8 +38,7 @@ def before_request():
     request_path = request.path
 
     # check if the path requires authentication
-    is_valid_path = auth.require_auth(request_path ,excluded_paths)
-    
+    is_valid_path = auth.require_auth(request_path, excluded_paths)
     if is_valid_path:
         # If no authorization header provided
         if not auth.authorization_header(request):
@@ -45,6 +46,7 @@ def before_request():
         # If the user is not valid
         if not auth.current_user(request):
             abort(403)
+
 
 @app.errorhandler(404)
 def not_found(error) -> str:
@@ -64,6 +66,7 @@ def unauthorized_access(error) -> str:
 def forbidden_error(error) -> str:
     """ Forbidden access error """
     return jsonify({"error": "Forbidden"}), 403
+
 
 if __name__ == "__main__":
     host = getenv("API_HOST", "0.0.0.0")

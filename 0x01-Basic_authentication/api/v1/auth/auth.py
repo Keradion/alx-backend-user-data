@@ -19,6 +19,11 @@ class Auth:
             path = path + '/'
 
         for each in excluded_paths:
+            if each[len(each) - 1] == '*':
+                index = each.index('*')
+                main_path = each[0:index]
+                if main_path in path:
+                    return False
             if not each.endswith('/'):
                 each = each + '/'
             if path == each:

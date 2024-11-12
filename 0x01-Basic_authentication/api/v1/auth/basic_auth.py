@@ -48,7 +48,6 @@ class BasicAuth(Auth):
         except Exception:
             return None
 
-
     def extract_user_credentials(self,
                                  decoded_base64_authorization_header:
                                  str) -> (str, str):
@@ -63,7 +62,6 @@ class BasicAuth(Auth):
             return (None, None)
         if ':' not in decoded_base64_authorization_header:
             return (None, None)
-        
         for char in decoded_base64_authorization_header:
             if char != ':':
                 user_email = user_email + char
@@ -72,8 +70,7 @@ class BasicAuth(Auth):
             if char == ':':
                 break
 
-        user_pwd = decoded_base64_authorization_header[len(user_email) + 1 ::]
-        
+        user_pwd = decoded_base64_authorization_header[len(user_email) + 1::]
         return (user_email, user_pwd)
 
     def user_object_from_credentials(self, user_email: str,
