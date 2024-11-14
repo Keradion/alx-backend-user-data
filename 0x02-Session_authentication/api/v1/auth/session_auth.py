@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """SessionAuth class"""
 import uuid
+import os
+from flask import request
 from api.v1.auth.auth import Auth
 
 class SessionAuth(Auth):
@@ -50,3 +52,25 @@ class SessionAuth(Auth):
         user_id = self.user_id_by_session_id.get(session_id)
 
         return user_id
+
+    def session_cookie(self, request=None) -> str:
+        """
+           Return 
+               
+               None If request is None
+
+           otherwise
+
+              Return the value of _my_session_id cookie from request
+              SESSION_NAME env variable holds the cookie
+        """
+        if request is None:
+            return 
+        
+        # Read the cookie name from the env variable
+        cookie_name = getenv('SESSION_NAME')
+
+        # Acess the the value of cookie_name from the cookie
+        cookie_value = request.cookie.get(cookie_name)
+        
+        return cookie_value
