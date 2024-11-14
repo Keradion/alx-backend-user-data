@@ -11,7 +11,7 @@ import os
 
 # This paths are excluded from authentication
 excluded_paths = [
-        '/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
+        '/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/', '/api/v1/auth_session/login/']
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
@@ -44,7 +44,7 @@ def before_request():
     is_valid_path = auth.require_auth(request_path, excluded_paths)
     if is_valid_path:
         # If no authorization header provided
-        if not auth.authorization_header(request):
+        if not auth.authorization_header(request) and not auth.session_cookie(request):
             abort(401)
         # If the user is not valid
         if not auth.current_user(request):
