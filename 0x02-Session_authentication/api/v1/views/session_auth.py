@@ -22,7 +22,7 @@ def login():
     # Retrieve user Password from form
     password = request.form.get('password')
     if not password:
-        return jsonify({"error": "password missing"}), 400
+        return ({"error": "password missing"}), 400
 
     # Retrieve User instance based on the email provided
     users = User.search({'email': email})
@@ -30,9 +30,9 @@ def login():
         # Validate the provided password
         is_pwd_valid = users[0].is_valid_password(password)
         if not is_pwd_valid:
-            return jsonify({"error": "wrong password"}), 401
+            return ({"error": "wrong password"}), 401
     else:
-        return jsonify({"error": "no user found for this email"})
+        return ({"error": "no user found for this email"}), 400
 
     # If the user founds and valid password provide, create a session Id 
     from api.v1.app import auth
