@@ -18,7 +18,7 @@ app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 auth = None
 
-AUTH_TYPE = os.getenv('AUTH_TYPE')
+AUTH_TYPE = getenv('AUTH_TYPE')
 
 if AUTH_TYPE == 'auth':
     from api.v1.auth.auth import Auth
@@ -33,7 +33,7 @@ if AUTH_TYPE == 'basic_auth':
 def before_request():
     """Handle everythin before any route handler is called"""
     if auth is None:
-        pass
+        return 
     # Get path from request
     request_path = request.path
 
@@ -46,7 +46,7 @@ def before_request():
         # If the user is not valid
         if not auth.current_user(request):
             abort(403)
-
+    return 
 
 @app.errorhandler(404)
 def not_found(error) -> str:
