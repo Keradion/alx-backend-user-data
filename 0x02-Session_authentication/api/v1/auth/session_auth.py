@@ -4,6 +4,9 @@ import uuid
 import os
 from flask import request
 from api.v1.auth.auth import Auth
+from models.user import User
+
+
 
 class SessionAuth(Auth):
     """Inhertis From Auth, session based authorization"""
@@ -53,3 +56,20 @@ class SessionAuth(Auth):
 
         return user_id
 
+
+    def current_user(self, request=None) -> 'User':
+        """
+           Returns a User Instance associate with session_id
+           based on a cookie value
+        """
+        # Get the session_id from cookies
+        session_id = self.session_cookie(request)
+
+        if session_id:
+            # Get user_id from session_id 
+            user_id = self.user_id_for_session_id(session_id)
+            if user_id:
+                user = User.get(user_id)
+                if user:
+                    return user
+        return 
