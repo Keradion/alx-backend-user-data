@@ -73,3 +73,36 @@ class SessionAuth(Auth):
                 if user:
                     return user
         return 
+
+    def destroy_session(self, request=None) -> '{}':
+        """
+           Retrun 
+              
+               None If request is None
+               False If request does not contain Session Id cookie
+               False If session Id does not linked with any user id
+           
+           otherwise
+              
+              delete a user session id from user_id_by_session_id
+              and return True.
+
+        """
+        if request is None:
+            return None
+
+        # check if request contain session_id cookie
+        cookie_name = os.getenv('SESSION_NAME')
+        session_id = request.cookies.get(cookie_name)
+
+        if session_id is None:
+            return False
+
+        # check if the session_id linked with any user
+        user_id = self.user_id_for_session_id(session_id)
+
+        if user_id is None:
+            return False
+
+        del self.user_id_by_session_id[session_id]
+        return True

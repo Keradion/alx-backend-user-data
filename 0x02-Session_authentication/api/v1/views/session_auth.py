@@ -46,6 +46,15 @@ def login():
 
     return response_object
 
+@app_views.route('/auth_session/logout', methods=['DELETE'], strict_slashes=False)
+def logout():
+    """A route to handle logout process"""
+    from api.v1.app import auth
+    is_deleted = auth.destroy_session(request)
+    if is_deleted:
+        return jsonify({})
+    abort(404)
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="5000")
