@@ -10,15 +10,13 @@ from models.user import User
 app = Flask(__name__)
 
 
-
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
 def login():
     """A route to handle login process"""
-    # Retrieve user Email from form  
+    # Retrieve user Email from form
     email = request.form.get('email')
     if not email:
         return jsonify({"error": "email missing"}), 400
-    
     # Retrieve user Password from form
     password = request.form.get('password')
     if not password:
@@ -34,11 +32,10 @@ def login():
     else:
         return ({"error": "no user found for this email"}), 400
 
-    # If the user founds and valid password provide, create a session Id 
+    # If the user founds and valid password provide, create a session Id
     from api.v1.app import auth
     user_id = users[0].id
     session_id = auth.create_session(user_id)
-    
     # Jsonfiy to create a response object to set a cookie value
     cookie_name = os.getenv('SESSION_NAME')
     response_object = jsonify(users[0].to_json())
@@ -46,7 +43,9 @@ def login():
 
     return response_object
 
-@app_views.route('/auth_session/logout', methods=['DELETE'], strict_slashes=False)
+
+@app_views.route(
+        '/auth_session/logout', methods=['DELETE'], strict_slashes=False)
 def logout():
     """A route to handle logout process"""
     from api.v1.app import auth
