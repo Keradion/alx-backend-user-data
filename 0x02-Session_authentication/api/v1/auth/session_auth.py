@@ -69,7 +69,7 @@ class SessionAuth(Auth):
                     return user
         return
 
-    def destroy_session(self, request=None) -> '{}':
+    def destroy_session(self, request=None):
         """
         Retrun
 

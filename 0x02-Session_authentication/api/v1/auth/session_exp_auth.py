@@ -22,13 +22,12 @@ class SessionExpAuth(SessionAuth):
         """
             Create a session id by calling super()
             super() will call create_session()
+            Retrun
 
-            Retrun 
-                
-                None If super() cant create a Session Id
+            None If super() cant create a Session Id
             otherwise
 
-                use this Session Id as a key of a dict 
+                use this Session Id as a key of a dict
                 user_id_by_session_id and assign a dict
                 as a value with user_idand created_at as a keys.
         """
@@ -38,7 +37,7 @@ class SessionExpAuth(SessionAuth):
             return None
 
         user_dict = {'user_id': user_id,
-                        'created_at': datetime.now()
+                     'created_at': datetime.now()
                      }
         # Assign the user_dict under session id act as key
         self.user_id_by_session_id[session_id] = user_dict
@@ -47,17 +46,14 @@ class SessionExpAuth(SessionAuth):
 
     def user_id_for_session(self, session_id=None):
         """
-           Return 
-              
-              None if session_id is None
-              None if user_id_by_session_id doesnt have key session_id
-              user_id if self.session_duration <= 0
-              None if session doesnt have key created_at
-              None if created_at + session_duration before datetime - timedelta
-
+           Return
+           None if session_id is None
+           None if user_id_by_session_id doesnt have key session_id
+           user_id if self.session _duration <= 0
+           None if session doesnt have key created_at
+           None if created_at + session_duration before datetime - timedelta
            otherwise
-              
-              return user_id
+           return user_id
         """
         if session_id is None:
             return None
@@ -74,5 +70,3 @@ class SessionExpAuth(SessionAuth):
         if datetime.now() > expiration_time:
             return None
         return session_dictionary.get('user_id')
-
-
