@@ -67,8 +67,8 @@ class Auth:
         # Read the cookie name from the env variable
         cookie_name = os.getenv('SESSION_NAME')
 
-        # Acess the the value of cookie_name from the cookies dictionary of request object
+        # Acess the the value of cookie_name from the
+        # cookies dictionary of request object
         cookie_value = request.cookies.get(cookie_name)
 
         return cookie_value
-
