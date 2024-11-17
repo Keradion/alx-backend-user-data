@@ -30,7 +30,7 @@ def login():
         if not is_pwd_valid:
             return ({"error": "wrong password"}), 401
     else:
-        return ({"error": "no user found for this email"}), 400
+        return ({"error": "no user found for this email"}), 404
 
     # If the user founds and valid password provide, create a session Id
     from api.v1.app import auth
