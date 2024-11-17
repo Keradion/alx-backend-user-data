@@ -7,21 +7,18 @@ from api.v1.auth.auth import Auth
 from models.user import User
 
 
-
 class SessionAuth(Auth):
     """Inhertis From Auth, session based authorization"""
     user_id_by_session_id = {}
+
     def create_session(self, user_id: str = None) -> str:
-        """ 
-           Return:
-                
+        """
+        Return:
                 None If user_id is None
                 None If user_id is not a string
-           
-           otherwise
-
+        otherwise
                 Generate a Session Id using uuid4()
-                use this session id as a key to store 
+                use this session id as a key to store
                 user_id inside dict user_id_by_session.
 
            Return: Session Id generated
@@ -39,14 +36,13 @@ class SessionAuth(Auth):
 
     def user_id_for_session_id(self, session_id: str = None) -> str:
         """
-           Retrun 
-                
-               None If session_id is None
-               None If session_id is not a string 
+           Retrun
 
+           None If session_id is None
+           None If session_id is not a string
            otherwise
-                
-                Retrun the value of user_id for key session_id
+
+           Retrun the value of user_id for key session_id
         """
         if session_id is None or not isinstance(session_id, str):
             return None
@@ -55,7 +51,6 @@ class SessionAuth(Auth):
         user_id = self.user_id_by_session_id.get(session_id)
 
         return user_id
-
 
     def current_user(self, request=None) -> 'User':
         """
@@ -66,24 +61,22 @@ class SessionAuth(Auth):
         session_id = self.session_cookie(request)
 
         if session_id:
-            # Get user_id from session_id 
+            # Get user_id from session_id
             user_id = self.user_id_for_session_id(session_id)
             if user_id:
                 user = User.get(user_id)
                 if user:
                     return user
-        return 
+        return
 
     def destroy_session(self, request=None) -> '{}':
         """
-           Retrun 
-              
-               None If request is None
-               False If request does not contain Session Id cookie
-               False If session Id does not linked with any user id
-           
-           otherwise
-              
+        Retrun
+
+        None If request is None
+        False If request does not contain Session Id cookie
+        False If session Id does not linked with any user id
+        otherwise
               delete a user session id from user_id_by_session_id
               and return True.
 
