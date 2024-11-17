@@ -11,7 +11,8 @@ import os
 
 # This paths are excluded from authentication
 excluded_paths = [
-        '/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/', '/api/v1/auth_session/login/']
+        '/api/v1/status/', '/api/v1/unauthorized/',
+        '/api/v1/forbidden/', '/api/v1/auth_session/login/']
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
@@ -35,11 +36,12 @@ if AUTH_TYPE == 'session_exp_auth':
     from api.v1.auth.session_exp_auth import SessionExpAuth
     auth = SessionExpAuth()
 
+
 @app.before_request
 def before_request():
     """Handle everythin before any route handler is called"""
     if auth is None:
-        return 
+        return
     # Get path from request
     request_path = request.path
 
@@ -47,14 +49,15 @@ def before_request():
     is_valid_path = auth.require_auth(request_path, excluded_paths)
     if is_valid_path:
         # If no authorization header provided
-        if not auth.authorization_header(request) and not auth.session_cookie(request):
-            abort(401)
+        if not auth.authorization_header(request):
+            if not auth.session_cookie(request):
+                abort(401)
         # If the user is not valid
         if not auth.current_user(request):
             abort(403)
-    
-    # Assign current user 
+    # Assign current user
     request.current_user = auth.current_user(request)
+
 
 @app.errorhandler(404)
 def not_found(error) -> str:
