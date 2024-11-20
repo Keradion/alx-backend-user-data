@@ -49,7 +49,7 @@ class DB:
            Raise NoResultFound if user does not exist,
            Raise InvalidRequestError if user does not have the key.
         """
-        keys = ['id', 'email', 'hashed_password', 'reset_token', 'session_id'] 
+        keys = ['id', 'email', 'hashed_password', 'reset_token', 'session_id']
         for key, value in kwargs.items():
             if key not in keys:
                 raise InvalidRequestError
