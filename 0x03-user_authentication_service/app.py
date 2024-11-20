@@ -31,7 +31,7 @@ def register_user() -> str:
         return jsonify(msg), 400
 
 
-@app.route('/sessions', methods=['POST'], strict_slashes=False)
+@app.route('/sessions', methods=['POST'])
 def login() -> str:
     """ endpoint to handle user login. """
     email = request.form.get('email')
@@ -48,7 +48,7 @@ def login() -> str:
         abort(401)
 
 
-@app.route('/sessions', methods=['DELETE'], strict_slashes=False)
+@app.route('/sessions', methods=['DELETE'])
 def logout() -> str:
     """ endpoint to handle user logout process """
     session_id = request.cookies.get('session_id', None)
