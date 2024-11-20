@@ -58,8 +58,8 @@ def logout() -> str:
     if user:
         auth.destroy_session(user.id)
         return redirect('/')
-
-    abort(403)
+    else:
+        abort(403)
 
 
 @app.route('/profile', methods=['GET'])
@@ -73,7 +73,7 @@ def profile() -> str:
     if user is None:
         abort(403)
 
-    msg = {'email': user.email}
+    msg = {"email": user.email}
     return jsonify(msg), 200
 
 
