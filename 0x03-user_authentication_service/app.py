@@ -16,7 +16,7 @@ def index():
 
 
 @app.route('/users', methods=['POST'], strict_slashes=False)
-def register_user():
+def register_user() -> str:
     """ endpoint to register a user. """
     # Fetch email and pwd from post request
     email = request.form.get('email')
