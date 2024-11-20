@@ -38,19 +38,3 @@ class DB:
         self._session.add(new_user)
         self._session.commit()
         return new_user
-
-    def find_user_by(self, **kwargs) -> User:
-        """Find a user matches with given argument"""
-        query = self._session.query(User)
-
-        for key, value in kwargs.items():
-            if not hasattr(User, key):
-                raise InvalidRequestError
-            user = query.filter(getattr(User, key) == value)
-
-        try:
-            user = user.one_or_none()
-            return user
-        except NoResultFound:
-            raise NoResultFound
-
