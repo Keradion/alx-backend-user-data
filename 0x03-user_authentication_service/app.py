@@ -32,7 +32,7 @@ def register_user():
 
 
 @app.route('/sessions', methods=['POST'], strict_slashes=False)
-def login():
+def login() -> str:
     """ endpoint to handle user login. """
     email = request.form.get('email')
     password = request.form.get('password')
@@ -41,10 +41,11 @@ def login():
     if is_valid_user:
         user_session_id = auth.create_session(email)
         msg = {"email": email, "message": "logged in"}
-        response_object = make_response(jsonify(msg))
-        response_object.set_cookie('session_id', user_session_id)
-        return response_object
-    abort(401)
+        response = jsonify(msg)
+        response.set_cookie('session_id', user_session_id)
+        return response
+    else:
+        abort(401)
 
 
 if __name__ == '__main__':
