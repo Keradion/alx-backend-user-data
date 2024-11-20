@@ -6,6 +6,7 @@ from db import DB
 from user import User
 from sqlalchemy.orm.exc import NoResultFound
 
+
 class Auth:
     """Auth class to interact with the authentication database.
     """
@@ -57,7 +58,6 @@ class Auth:
         except Exception:
             return None
 
-
     def get_user_from_session_id(self, session_id: str) -> User:
         """ Get a user associated with a session_id"""
         if session_id is None:
@@ -74,7 +74,7 @@ class Auth:
     def destroy_session(self, user_id: int) -> None:
         """Updates the corresponding user's session_id to None"""
         if user_id is None:
-            return 
+            return
         search_query = {'id': user_id}
         try:
             user = self._db.find_user_by(**search_query)
@@ -83,6 +83,7 @@ class Auth:
             return None
 
         return None
+
 
 def _generate_uuid() -> str:
     """ Generate and return UUID in string format."""
