@@ -27,7 +27,7 @@ class Auth:
 
         raise ValueError('User {} already exists.'.format(email))
 
-    def valid_login(self, email, password) -> bool:
+    def valid_login(self, email: str, password: str) -> bool:
         """ check password validity """
         search_query = {'email': email}
         try:
