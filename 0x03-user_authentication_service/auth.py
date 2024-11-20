@@ -71,18 +71,17 @@ class Auth:
         except Exception:
             return None
 
-
-def destroy_session(self, user_id: int) -> None:
-    """Updates the corresponding user's session_id to None"""
-    if user_id is None:
-        return
-    search_query = {'id': user_id}
-    try:
-        user = self._db.find_user_by(**search_query)
-        self.update_user(user_id, session_id=None)
-    except NoResultFound:
+    def destroy_session(self, user_id: int) -> None:
+        """Updates the corresponding user's session_id to None"""
+        if user_id is None:
+            return
+        search_query = {'id': user_id}
+        try:
+            user = self._db.find_user_by(**search_query)
+            self.update_user(user.id, session_id=None)
+        except NoResultFound:
+            return None
         return None
-    return None
 
 
 def _generate_uuid() -> str:
