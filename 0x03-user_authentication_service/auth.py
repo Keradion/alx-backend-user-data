@@ -65,7 +65,7 @@ class Auth:
 
         search_query = {'session_id': session_id}
         try:
-            user = self._db.find_user_by(**kwargs)
+            user = self._db.find_user_by(**search_query)
             if user:
                 return user
         except Exception:
