@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""User Model Definition"""
+"""Create SQLALCHEMY model called 'User' for database 
+   Table called 'users'
+"""
 
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
