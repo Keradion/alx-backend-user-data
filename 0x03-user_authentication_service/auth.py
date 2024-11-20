@@ -43,6 +43,19 @@ class Auth:
         except Exception:
             return False
 
+    def create_session(self, email: str) -> str:
+        """
+           Create a session id and store it in the db
+           as the user's session_id.
+        """
+        search_query = {'email': email}
+        try:
+            user = self._db.find_user_by(**search_query)
+            session_id = _generate_uuid()
+            setattr(user, 'session_id', session_id)
+            return session_id
+        except Exception:
+            return None
 
 def _generate_uuid() -> str:
     """ Generate and return UUID in string format."""
