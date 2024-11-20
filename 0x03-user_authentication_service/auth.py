@@ -43,9 +43,10 @@ class Auth:
         except Exception:
             return False
 
-    def _generate_uuid(self) -> str:
-        """ Generate and return UUID in string format."""
-        return str(uuid.uuid4())
+
+def _generate_uuid(self) -> str:
+    """ Generate and return UUID in string format."""
+    return str(uuid.uuid4())
 
 
 def _hash_password(password: str) -> bytes:
