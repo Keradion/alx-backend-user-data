@@ -40,10 +40,10 @@ def login():
     is_valid_user = auth.valid_login(email, password)
     if is_valid_user:
         user_session_id = auth.create_session(email)
-        response_object = make_response()
-        response_object.set_cookie('session_id', user_session_id)
         msg = {"email": email, "message": "logged in"}
-        return jsonify(msg)
+        response_object = make_response(jsonify(msg))
+        response_object.set_cookie('session_id', user_session_id)
+        return response_object
     abort(401)
 
 
