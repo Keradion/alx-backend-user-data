@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Hash Function"""
 import bcrypt
+import uuid
 from db import DB
 from user import User
 
@@ -25,6 +26,26 @@ class Auth:
             return new_user
 
         raise ValueError('User {} already exists.'.format(email))
+
+    def valid_login(self, email, password) -> bool:
+        """ check password validity """
+        search_query = {'email': email}
+        try:
+            user_found = self._db.find_user_by(**search_query)
+            hashed_password = user_found.hashed_password
+            check_pwd = bcrypt.checkpw(password=password.encode(),
+                                       hashed_password=hashed_password
+                                       )
+            if check_pwd:
+                return True
+            else:
+                return False
+        except Exception:
+            return False
+
+    def _generate_uuid(self):
+        """ Generate and return UUID in string format."""
+        return str(uuid.uuid4())
 
 
 def _hash_password(password: str) -> bytes:
