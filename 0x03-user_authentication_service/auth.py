@@ -57,6 +57,20 @@ class Auth:
         except Exception:
             return None
 
+
+    def get_user_from_session_id(self, session_id: str) -> User:
+        """ Get a user associated with a session_id"""
+        if session_id is None:
+            return None
+
+        search_query = {'session_id': session_id}
+        try:
+            user = self._db.find_user_by(**kwargs)
+            if user:
+                return user
+        except Exception:
+            return None
+
 def _generate_uuid() -> str:
     """ Generate and return UUID in string format."""
     return str(uuid.uuid4())
