@@ -7,6 +7,7 @@ from user import User
 from sqlalchemy.orm.exc import NoResultFound
 
 
+
 class Auth:
     """Auth class to interact with the authentication database.
     """
@@ -76,7 +77,7 @@ class Auth:
         search_query = {'id': user_id}
         try:
             user = self._db.find_user_by(**search_query)
-            self_db.update_user(user.id, session_id=None)
+            self._db.update_user(user.id, session_id=None)
         except NoResultFound:
             return None
         return None
