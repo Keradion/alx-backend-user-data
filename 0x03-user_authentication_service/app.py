@@ -36,19 +36,19 @@ def log_in() -> str:
     """ endpoint to handle user login. """
     try:
         email = request.form['email']
-        password = request.form.['password']
+        password = request.form['password']
     except KeyError:
         abort(400)
 
     is_valid_user = auth.valid_login(email, password)
-    if is_valid_user:
-        user_session_id = auth.create_session(email)
-        msg = {"email": email, "message": "logged in"}
-        response = jsonify(msg)
-        response.set_cookie('session_id', user_session_id)
-        return response
-    else:
+    if not is_valid_user:
         abort(401)
+
+    user_session_id = auth.create_session(email)
+    msg = {"email": email, "message": "logged in"}
+    response = jsonify(msg)
+    response.set_cookie('session_id', user_session_id)
+    return response
 
 
 @app.route('/sessions', methods=['DELETE'])
