@@ -51,15 +51,13 @@ def log_in() -> str:
 @app.route('/sessions', methods=['DELETE'])
 def log_out() -> str:
     """ endpoint to handle user logout process """
-    session_id = request.cookies.get('session_id', None)
-    if session_id is None:
+    session_id = request.cookies.get('session_id')
+    user = Auth.get_user_from_session_id(session_id)
+    if not user:
         abort(403)
-    user = auth.get_user_from_session_id(session_id)
-    if user:
-        AUTH.destroy_session(user.id)
-        return redirect('/')
-    else:
-        abort(403)
+
+    AUTH.destroy_session(user.id)
+    return redirect('/')
 
 
 @app.route('/profile', methods=['GET'])
