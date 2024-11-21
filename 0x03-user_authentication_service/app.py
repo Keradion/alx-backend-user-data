@@ -5,7 +5,7 @@ from auth import Auth
 
 app = Flask(__name__)
 
-auth = Auth()
+AUTH = Auth()
 
 
 @app.route('/', methods=['GET'], strict_slashes=False)
@@ -34,17 +34,14 @@ def register_user() -> str:
 @app.route('/sessions', methods=['POST'])
 def log_in() -> str:
     """ endpoint to handle user login. """
-    try:
-        email = request.form['email']
-        password = request.form['password']
-    except KeyError:
-        abort(400)
+    email = request.form.get('email')
+    password = request.form.get('password')
 
-    is_valid_user = auth.valid_login(email, password)
+    is_valid_user = AUTH.valid_login(email, password)
     if not is_valid_user:
         abort(401)
 
-    user_session_id = auth.create_session(email)
+    user_session_id = AUTH.create_session(email)
     msg = {"email": email, "message": "logged in"}
     response = jsonify(msg)
     response.set_cookie('session_id', user_session_id)
@@ -59,7 +56,7 @@ def log_out() -> str:
         abort(403)
     user = auth.get_user_from_session_id(session_id)
     if user:
-        auth.destroy_session(user.id)
+        AUTH.destroy_session(user.id)
         return redirect('/')
     else:
         abort(403)
@@ -72,7 +69,7 @@ def profile() -> str:
     if session_id is None:
         abort(403)
 
-    user = auth.get_user_from_session_id(session_id)
+    user = AUTH.get_user_from_session_id(session_id)
     if user is None:
         abort(403)
 
