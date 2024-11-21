@@ -34,8 +34,11 @@ def register_user() -> str:
 @app.route('/sessions', methods=['POST'])
 def login() -> str:
     """ endpoint to handle user login. """
-    email = request.form.get('email')
-    password = request.form.get('password')
+    try:
+        email = request.form.get('email')
+        password = request.form.get('password')
+    except Exception:
+        abort(401)
 
     is_valid_user = auth.valid_login(email, password)
     if is_valid_user:
@@ -43,7 +46,7 @@ def login() -> str:
         msg = {"email": email, "message": "logged in"}
         response = jsonify(msg)
         response.set_cookie('session_id', user_session_id)
-        return response
+        return response, 200
     else:
         abort(401)
 
