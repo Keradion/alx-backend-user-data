@@ -4,16 +4,19 @@ from auth import Auth
 from user import User
 from db import DB
 
-auth = Auth()
+AUTH = Auth()
 email = 'bob@bob.com'
 password = 'MyPwdOfBob'
 
-auth.register_user(email, password)
-
-print(auth.get_reset_password_token(email))
-
+user = AUTH.register_user(email, password)
+print(AUTH.get_reset_password_token(email))
+print(user.reset_token)
 fake_email = "dan2@dan.com"
 try:
-    print(auth.get_reset_password_token(fake_email))
+    print(AUTH.get_reset_password_token(fake_email))
 except ValueError:
     print('fuck exception')
+
+AUTH.update_password(reset_token=user.reset_token, password='123')
+print(user.reset_token)
+print(user.hashed_password)
