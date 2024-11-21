@@ -23,7 +23,7 @@ def register_user() -> str:
     password = request.form.get('password')
 
     try:
-        auth.register_user(email, password)
+        AUTH.register_user(email, password)
         msg = {"email": email, "message": "user created"}
         return jsonify(msg)
     except ValueError:
@@ -75,5 +75,20 @@ def profile() -> str:
     return jsonify(msg), 200
 
 
+@app.route('/reset_password', methods=['POST'])
+def reset_reset_password_token():
+    """ endpoint to handle reset_token request. """
+    email = request.form.get('email')
+    try:
+        search_query = {'email': email}
+        user = AUTH.find_user_by(**search_query)
+    except Exception:
+        abort(403)
+
+    reset_token = AUTH.get_reset_password_token(email)
+    msg = {"email": email, "reset_token": reset_token}
+    response = jsonify(msg)
+    return response, 200
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port="5000")
+    app.run(host='0.0.0.0', port='5000')
