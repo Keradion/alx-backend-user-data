@@ -32,13 +32,13 @@ def register_user() -> str:
 
 
 @app.route('/sessions', methods=['POST'])
-def login() -> str:
+def log_in() -> str:
     """ endpoint to handle user login. """
     try:
-        email = request.form.get('email')
-        password = request.form.get('password')
-    except Exception:
-        abort(401)
+        email = request.form['email']
+        password = request.form.['password']
+    except KeyError:
+        abort(400)
 
     is_valid_user = auth.valid_login(email, password)
     if is_valid_user:
@@ -46,13 +46,13 @@ def login() -> str:
         msg = {"email": email, "message": "logged in"}
         response = jsonify(msg)
         response.set_cookie('session_id', user_session_id)
-        return response, 200
+        return response
     else:
         abort(401)
 
 
 @app.route('/sessions', methods=['DELETE'])
-def logout() -> str:
+def log_out() -> str:
     """ endpoint to handle user logout process """
     session_id = request.cookies.get('session_id', None)
     if session_id is None:
